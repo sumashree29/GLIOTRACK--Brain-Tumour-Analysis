@@ -29,15 +29,10 @@ app = FastAPI(
     redoc_url=None,
 )
 
-# FIX #6 — CORS restricted to explicit origins from .env
+# FIX #6 — CORS restricted to explicit origins from ALLOWED_ORIGINS env var
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:3000",
-        "http://127.0.0.1:3000",
-        "http://localhost:8000",
-        "http://127.0.0.1:8000",
-    ],
+    allow_origins=settings.get_allowed_origins(),
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
