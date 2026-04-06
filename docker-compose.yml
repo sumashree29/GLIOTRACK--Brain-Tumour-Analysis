@@ -1,0 +1,9 @@
+# FIX #24 — removed deprecated top-level "version" key (Docker Compose v2+)
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    # Pass credentials as environment variables, never bake them into the image
+    env_file: .env
+    restart: unless-stopped

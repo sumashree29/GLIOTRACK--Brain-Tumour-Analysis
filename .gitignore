@@ -1,0 +1,29 @@
+# ── Secrets ──
+.env
+.env.local
+frontend/.env.local
+
+# ── Python ──
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# ── Node / Next.js ──
+node_modules/
+frontend/node_modules/
+frontend/.next/
+frontend/tsconfig.tsbuildinfo
+.next/
+
+# ── Large files ──
+*.zip
+frontend.zip
+
+# ── OS ──
+.DS_Store
+Thumbs.db
