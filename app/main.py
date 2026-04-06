@@ -84,16 +84,11 @@ async def unhandled_exception_handler(request: _Request, exc: Exception):
     )
 
 
-# Preload embedding model at startup to avoid cold-start timeout on first request
+# Removed preload to save memory on Render Free Tier boot.
+# The embedding model will now lazy-load only when the RAG agent is executed.
 @app.on_event("startup")
 async def preload_models():
-    try:
-        from rag.embeddings import embedding_model
-        # Trigger a dummy encode to warm up the model
-        embedding_model.encode("warmup")
-        logger.info("Embedding model preloaded successfully.")
-    except Exception as exc:
-        logger.warning("Could not preload embedding model: %s", exc)
+    logger.info("Skipping eager embedding model load to conserve RAM on free tier.")
 
 app.include_router(auth.router)
 app.include_router(patients.router)
