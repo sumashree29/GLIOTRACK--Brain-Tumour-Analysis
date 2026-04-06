@@ -117,48 +117,15 @@ def _summarise_passages(passages: list[dict]) -> list[dict]:
 
 def _live_rag_query(query_used: str) -> dict:
     """
-    Re-run Qdrant search using the stored query string.
-    Maps RAGPassage.score → relevance_score to match the frontend type.
-    Enriches each passage with Groq-generated bullet summaries.
+    RAG is disabled on the free tier because loading PyTorch for embeddings
+    requires >512MB RAM, which causes an Out of Memory (OOM) crash.
     """
-    try:
-        from rag.knowledge_base import query_knowledge_base
-        ok, passages, reason = query_knowledge_base(query_used)
-
-        if ok and passages:
-            raw_passages = [
-                {
-                    "source_document":   p.source_document,
-                    "guideline_version": p.guideline_version,
-                    "publication_year":  p.publication_year,
-                    "passage_text":      p.passage_text,
-                    "relevance_score":   round(p.score, 4),
-                }
-                for p in passages
-            ]
-            enriched = _summarise_passages(raw_passages)
-            return {
-                "rag_available":  True,
-                "passages":       enriched,
-                "failure_reason": None,
-                "query_used":     query_used,
-            }
-
-        return {
-            "rag_available":  False,
-            "passages":       [],
-            "failure_reason": reason or "No passages above relevance threshold",
-            "query_used":     query_used,
-        }
-
-    except Exception as exc:
-        logger.warning("Live RAG re-query failed for query='%s': %s", query_used[:60], exc)
-        return {
-            "rag_available":  False,
-            "passages":       [],
-            "failure_reason": str(exc),
-            "query_used":     query_used,
-        }
+    return {
+        "rag_available":  False,
+        "passages":       [],
+        "failure_reason": "RAG is disabled on the Render Free Tier to prevent out-of-memory crashes.",
+        "query_used":     query_used,
+    }
 
 
 @router.get("/{scan_id}/full")
