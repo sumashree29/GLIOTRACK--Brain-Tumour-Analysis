@@ -1,0 +1,2 @@
+﻿app/scans/[scan_id]/report/page.tsx(390,46): error TS2339: Property 'bp_start' does not exist on type 'string'.
+app/scans/[scan_id]/report/page.tsx(391,50): error TS2339: Property 'bp_end' does not exist on type 'string'.

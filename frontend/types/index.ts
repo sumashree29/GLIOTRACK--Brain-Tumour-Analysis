@@ -46,6 +46,7 @@ export interface PatientRecord {
   patient_id: string;
   assigned_doctor: string;
   created_at: string;
+  archived_at: string | null;
 }
 
 // ── Scans ─────────────────────────────────────────────────────────────────────
@@ -116,6 +117,7 @@ export interface Agent3Output {
   dissociation_flag: boolean;
   dissociation_detail: string | null;
   low_confidence_flag: boolean;
+  trajectory_intervals: { bp_start: number; bp_end: number; label?: string }[] | null;
 }
 
 export interface RAGPassage {
