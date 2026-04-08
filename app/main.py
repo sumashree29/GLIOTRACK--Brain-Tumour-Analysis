@@ -3,6 +3,7 @@ FastAPI application entry point.
 Fix #6  — CORS restricted to ALLOWED_ORIGINS env var, never "*".
 Fix #7  — /health is now admin-only (moved to admin router).
 Fix #10 — global rate limiter middleware added.
+Fix CORS — OPTIONS method explicitly allowed.
 """
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -30,11 +31,14 @@ app = FastAPI(
 )
 
 # FIX #6 — CORS restricted to explicit origins from ALLOWED_ORIGINS env var
+allowed_origins = settings.get_allowed_origins()
+logger.info(f"CORS Allowed Origins: {allowed_origins}")
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.get_allowed_origins(),
+    allow_origins=allowed_origins,
     allow_credentials=True,
-    allow_methods=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"],  # Fix CORS — explicitly include OPTIONS
     allow_headers=["*"],
 )
 
